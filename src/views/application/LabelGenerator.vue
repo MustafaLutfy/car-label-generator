@@ -199,8 +199,8 @@
             <!-- Label Card -->
             <div
               id="label-content"
-              class="bg-white border-4 border-black p-6"
-              style="direction: rtl; font-family: 'Arial', sans-serif; max-width: 100%; aspect-ratio: 2/1;"
+              class="bg-white border-4 border-black mx-auto"
+              style="direction: rtl; font-family: 'Arial', sans-serif; max-width: 800px; width: 100%; aspect-ratio: 2/1; padding: 1.5rem 0.5rem 1.5rem 1.5rem;"
             >
               <div class="space-y-2 text-right">
                 <!-- Row 1 - Two columns -->
@@ -372,57 +372,69 @@ const clearData = () => {
 const exportToPDF = async () => {
   const element = document.getElementById('label-content')
 
-  // Store original styles
-  const originalWidth = element.style.width
-  const originalHeight = element.style.height
-  const originalMaxWidth = element.style.maxWidth
-  const originalAspectRatio = element.style.aspectRatio
-
   try {
-    // Temporarily set to exact export dimensions (2:1 ratio)
-    element.style.width = '1150px'
-    element.style.height = '575px'
-    element.style.maxWidth = 'none'
-    element.style.aspectRatio = 'auto'
+    // Wait for fonts to be loaded
+    await document.fonts.ready
 
-    // Wait for the layout to update
-    await new Promise(resolve => setTimeout(resolve, 100))
+    // Get the actual rendered dimensions
+    const rect = element.getBoundingClientRect()
+    const width = rect.width
+    const height = rect.height
 
-    // Capture the element as canvas
+    // Temporarily remove border for export
+    const originalBorder = element.style.border
+    element.style.border = 'none'
+
+    // Fixed dimensions that work well for the label
+    const canvasWidth = 500
+    const canvasHeight = 395
+    const scale = 2
+
+    // Capture the element as canvas with exact dimensions
     const canvas = await html2canvas(element, {
-      scale: 2,
+      scale: scale,
       useCORS: true,
+      allowTaint: true,
       logging: false,
-      width: 1150,
-      height: 575,
-      windowWidth: 1150,
-      windowHeight: 575
+      width: canvasWidth,
+      height: canvasHeight,
+      windowWidth: width,
+      windowHeight: height,
+      letterRendering: true,
+      foreignObjectRendering: false,
+      imageTimeout: 0,
+      removeContainer: true,
+      backgroundColor: '#ffffff'
     })
 
-    // Convert pixels to mm for PDF (at 96 DPI)
-    // 1150px = 304.27mm, 575px = 152.14mm (2:1 ratio)
-    const widthMm = 304.27
-    const heightMm = 152.14
+    // Restore border after capture
+    element.style.border = originalBorder
 
-    // Create PDF with exact dimensions
+    // Calculate PDF dimensions based on canvas dimensions
+    // Convert 480x395 pixels to mm at 96 DPI
+    const pdfWidthMm = (canvasWidth / 96) * 25.4
+    const pdfHeightMm = (canvasHeight / 96) * 25.4
+
+    // Create PDF with exact dimensions matching the canvas
     const pdf = new jsPDF({
       orientation: 'landscape',
       unit: 'mm',
-      format: [widthMm, heightMm]
+      format: [pdfWidthMm, pdfHeightMm],
+      compress: true
     })
 
-    // Convert canvas to image and add to PDF
-    const imgData = canvas.toDataURL('image/jpeg', 1.0)
-    pdf.addImage(imgData, 'JPEG', 0, 0, widthMm, heightMm)
+    // Add the canvas image to fill the entire PDF page
+    const imgData = canvas.toDataURL('image/png', 1.0)
+    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidthMm, pdfHeightMm, '', 'FAST')
 
     // Save the PDF
     pdf.save(`car-label-${labelData.value.vinNumber || 'export'}.pdf`)
-  } finally {
-    // Restore original styles
-    element.style.width = originalWidth
-    element.style.height = originalHeight
-    element.style.maxWidth = originalMaxWidth
-    element.style.aspectRatio = originalAspectRatio
+  } catch (error) {
+    console.error('Error exporting PDF:', error)
+    alert('Failed to export PDF. Please try again.')
+
+    // Make sure to restore border even if there's an error
+    element.style.border = originalBorder
   }
 }
 </script>
@@ -430,15 +442,29 @@ const exportToPDF = async () => {
 <style scoped>
 #label-content {
   box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 #label-content * {
   box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Ensure consistent rendering for PDF export */
 #label-content p {
   margin: 0;
   line-height: 1.4;
+  text-rendering: optimizeLegibility;
+}
+
+/* Better Arabic text rendering */
+#label-content p,
+#label-content span {
+  font-feature-settings: normal;
+  font-variant-ligatures: normal;
+  -webkit-font-feature-settings: normal;
 }
 </style>
