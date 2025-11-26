@@ -196,75 +196,75 @@
               </button>
             </div>
 
-            <!-- Label Card -->
-            <div
-              id="label-content"
-              class="bg-white border-4 border-black mx-auto"
-              style="direction: rtl; font-family: 'Arial', sans-serif; max-width: 800px; width: 100%; aspect-ratio: 2/1; padding: 1.5rem 0.5rem 1.5rem 1.5rem;"
-            >
-              <div class="space-y-2 text-right">
-                <!-- Row 1 - Two columns -->
-                <div class="grid grid-cols-2 gap-6">
-                    <div class="text-right">
-                    <p class="text-[16px] font-bold">بلد الانتاج: <span class="font-bold">{{ labelData.countryOfProduction || '___________________' }}</span></p>
+            <!-- Label Card - Exact 10cm × 5cm preview with border -->
+            <div class="border-4 border-black mx-auto" style="width: 400px; height: 200px;">
+              <div
+                id="label-content"
+                class="bg-white w-full h-full"
+                style="direction: rtl; font-family: 'Arial', sans-serif; padding: 0px 8px 10px 8px; font-size: 12.2px; line-height: 1.2;"
+              >
+                <div style="display: flex; flex-direction: column; gap: 1px;">
+                  <!-- Row 1 - Two columns -->
+                  <div style="display: grid; grid-template-columns: 0.8fr 1fr; gap: 2px;">
+                    <div style="text-align: right;">
+                      <p  style="margin: 0; font-weight: bold;">بلد الانتاج: <span>{{ labelData.countryOfProduction || '' }}</span></p>
+                    </div>
+                    <div style="text-align: right;">
+                      <p style="margin: 0; font-weight: bold;">اسم الصانع: <span>{{ labelData.manufacturerName || '' }}</span></p>
+                    </div>
                   </div>
-                  <div class="text-right">
-                    <p class="text-[16px] font-bold">اسم الصانع: <span class="font-bold">{{ labelData.manufacturerName || '___________________' }}</span></p>
+
+                  <!-- Row 2 - Two columns -->
+                  <div style="display: grid; grid-template-columns: 0.8fr 1fr; gap: 2px;">
+                    <div style="text-align: right;">
+                      <p style="margin: 0; font-weight: bold;">سنة الطراز: <span>{{ labelData.modelYear || '' }}</span></p>
+                    </div>
+                    <div style="text-align: right;">
+                      <p style="margin: 0; font-weight: bold;">تاريخ الانتاج: <span>{{ labelData.productionDate || '' }}</span></p>
+                    </div>
                   </div>
-                
-                </div>
 
-                <!-- Row 2 - Two columns -->
-                <div class="grid grid-cols-2 gap-6">
-                    <div class="text-right">
-                    <p class="text-[16px] font-bold">سنة الطراز: <span class="font-bold">{{ labelData.modelYear || '___________________' }}</span></p>
+                  <!-- Row 3 - Full width -->
+                  <div>
+                    <p style="margin: 0; font-weight: bold; text-align: right;">الوزن الاقصى للمركبة بـ (كغ): <span>{{ labelData.maxWeight || '' }}</span></p>
                   </div>
-                  <div class="text-right">
-                    <p class="text-[16px] font-bold">تاريخ الانتاج: <span class="font-bold">{{ labelData.productionDate || '__________________' }}</span></p>
+
+                  <!-- Row 4 - Full width -->
+                  <div>
+                    <p style="margin: 0; font-weight: bold; text-align: right;">الوزن الاقصى على كل محور بـ (كغ) (بالنسبة للشاحنات): <span>{{ labelData.maxWeightPerAxle || '' }}</span></p>
                   </div>
-                  
-                </div>
 
-                <!-- Row 3 - Full width -->
-                <div>
-                  <p class="text-[16px] font-bold">الوزن الاقصى للمركبة بـ (كغ): <span class="font-bold">{{ labelData.maxWeight || '___________________' }}</span></p>
-                </div>
+                  <!-- Row 5 - Compliance Note -->
+                  <div>
+                    <p style="margin: 0; font-weight: bold; text-align: right; line-height: 1.3;">
+                      {{ labelData.complianceNote || defaultComplianceNote }}
+                    </p>
+                  </div>
 
-                <!-- Row 4 - Full width -->
-                <div>
-                  <p class="text-[16px] font-bold">الوزن الاقصى على كل محور بـ (كغ) (بالنسبة للشاحنات): <span class="font-bold">{{ labelData.maxWeightPerAxle || '___________________' }}</span></p>
-                </div>
+                  <!-- Row 6 - VIN -->
+                  <div>
+                    <p style="margin: 0; font-weight: bold; text-align: right;">الرقم التعريفي للمركبة <span style="direction: ltr; display: inline-block;">VIN</span>:<span class="text-[14.5px] transform -translate-y-[2px]"  style="font-family: monospace;">{{ labelData.vinNumber || '' }}</span></p>
+                  </div>
+ 
+                  <!-- Row 7 - Vehicle Classification -->
+                  <div>
+                    <p style="margin: 0; font-weight: bold; text-align: right;">صنف المركبة: <span>{{ labelData.vehicleClassification || '' }}</span></p>
+                  </div>
 
-                <!-- Row 5 - Compliance Note -->
-                <div>
-                  <p class="text-[16px] font-bold leading-snug">
-                    {{ labelData.complianceNote || defaultComplianceNote }}
-                  </p>
-                </div>
+                  <!-- Row 8 - Engine -->
+                  <div>
+                    <p style="margin: 0; font-weight: bold; text-align: right;">المحرك: <span>{{ labelData.engine || '' }}</span></p>
+                  </div>
 
-                <!-- Row 6 - VIN -->
-                <div>
-                  <p class="text-[16px] font-bold">الرقم التعريفي للمركبة <span class="font-bold" style="direction: ltr; display: inline-block;">VIN:</span> <span class="font-bold font-mono">{{ labelData.vinNumber || '___________________' }}</span></p>
-                </div>
+                  <!-- Row 9 - Model -->
+                  <div>
+                    <p style="margin: 0; font-weight: bold; text-align: right;">الطراز: <span class="text-[12.5px] transform -translate-y-[1px]" style="direction: ltr; display: inline-block;">{{ labelData.model || '' }}</span></p>
+                  </div>
 
-                <!-- Row 7 - Vehicle Classification -->
-                <div>
-                  <p class="text-[16px] font-bold">صنف المركبة: <span class="font-bold">{{ labelData.vehicleClassification || '___________________' }}</span></p>
-                </div>
-
-                <!-- Row 8 - Engine -->
-                <div>
-                  <p class="text-[16px] font-bold">المحرك: <span class="font-bold">{{ labelData.engine || '___________________' }}</span></p>
-                </div>
-
-                <!-- Row 9 - Model -->
-                <div>
-                  <p class="text-[16px] font-bold">الطراز: <span class="font-bold" style="direction: ltr; display: inline-block;">{{ labelData.model || '___________________' }}</span></p>
-                </div>
-
-                <!-- Row 10 - Factory -->
-                <div>
-                  <p class="text-[16px] font-bold">المصنع: <span class="font-bold">{{ labelData.factory || '___________________' }}</span></p>
+                  <!-- Row 10 - Factory -->
+                  <div>
+                    <p style="margin: 0; font-weight: bold; text-align: right;">المصنع: <span>{{ labelData.factory || '' }}</span></p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -376,30 +376,21 @@ const exportToPDF = async () => {
     // Wait for fonts to be loaded
     await document.fonts.ready
 
-    // Get the actual rendered dimensions
-    const rect = element.getBoundingClientRect()
-    const width = rect.width
-    const height = rect.height
+    // PDF dimensions: exactly 10cm × 5cm (100mm × 50mm)
+    const pdfWidthMm = 100
+    const pdfHeightMm = 50
 
-    // Temporarily remove border for export
-    const originalBorder = element.style.border
-    element.style.border = 'none'
+    // Canvas dimensions for print quality (300 DPI)
+    // 100mm = 3.937 inches × 300 DPI = 1181 pixels
+    // 50mm = 1.969 inches × 300 DPI = 591 pixels
+    const scale = 3
 
-    // Fixed dimensions that work well for the label
-    const canvasWidth = 500
-    const canvasHeight = 395
-    const scale = 2
-
-    // Capture the element as canvas with exact dimensions
+    // Capture the element at high resolution
     const canvas = await html2canvas(element, {
       scale: scale,
       useCORS: true,
       allowTaint: true,
       logging: false,
-      width: canvasWidth,
-      height: canvasHeight,
-      windowWidth: width,
-      windowHeight: height,
       letterRendering: true,
       foreignObjectRendering: false,
       imageTimeout: 0,
@@ -407,15 +398,7 @@ const exportToPDF = async () => {
       backgroundColor: '#ffffff'
     })
 
-    // Restore border after capture
-    element.style.border = originalBorder
-
-    // Calculate PDF dimensions based on canvas dimensions
-    // Convert 480x395 pixels to mm at 96 DPI
-    const pdfWidthMm = (canvasWidth / 96) * 25.4
-    const pdfHeightMm = (canvasHeight / 96) * 25.4
-
-    // Create PDF with exact dimensions matching the canvas
+    // Create PDF with exact dimensions: 10cm × 5cm
     const pdf = new jsPDF({
       orientation: 'landscape',
       unit: 'mm',
@@ -432,9 +415,6 @@ const exportToPDF = async () => {
   } catch (error) {
     console.error('Error exporting PDF:', error)
     alert('Failed to export PDF. Please try again.')
-
-    // Make sure to restore border even if there's an error
-    element.style.border = originalBorder
   }
 }
 </script>
