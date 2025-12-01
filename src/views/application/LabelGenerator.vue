@@ -6,10 +6,8 @@
         <div class="flex items-center gap-3">
           <h1 class="text-2xl font-bold text-primary">Car Label Generator</h1>
         </div>
-        <button
-          @click="handleLogout"
-          class="px-4 py-2 text-primary hover:bg-primary-50 rounded-lg transition-colors font-semibold"
-        >
+        <button @click="handleLogout"
+          class="px-4 py-2 text-primary hover:bg-primary-50 rounded-lg transition-colors font-semibold">
           Logout
         </button>
       </div>
@@ -21,52 +19,40 @@
         <!-- Actions Bar -->
         <div class="flex flex-col sm:flex-row gap-4 mb-8 justify-between items-start sm:items-center">
           <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-            <input
-              type="file"
-              ref="fileInput"
-              @change="handleFileUpload"
-              accept=".xlsx,.xls,.csv"
-              class="hidden"
-            />
-            <button
-              @click="$refs.fileInput.click()"
-              class="flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white font-semibold rounded-lg hover:bg-primary-600 transition-colors"
-            >
+            <input type="file" ref="fileInput" @change="handleFileUpload" accept=".xlsx,.xls,.csv" class="hidden" />
+            <button @click="$refs.fileInput.click()"
+              class="flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white font-semibold rounded-lg hover:bg-primary-600 transition-colors">
               <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
               </svg>
               Import Excel/CSV
             </button>
-            <button
-              @click="addNewItem"
-              class="flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
-            >
+            <button @click="addNewItem"
+              class="flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">
               <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
               </svg>
               Add Item
             </button>
-            <button
-              v-if="items.length > 0"
-              @click="clearAllData"
-              class="px-6 py-3 border-2 border-red-500 text-red-500 font-semibold rounded-lg hover:bg-red-50 transition-colors"
-            >
+            <button v-if="items.length > 0" @click="clearAllData"
+              class="px-6 py-3 border-2 border-red-500 text-red-500 font-semibold rounded-lg hover:bg-red-50 transition-colors">
               Clear All
             </button>
           </div>
-          
-          <button
-            v-if="items.length > 0"
-            @click="exportAllToPDF"
-            :disabled="isExporting"
-            class="flex items-center justify-center gap-2 px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
-          >
+
+          <button v-if="items.length > 0" @click="exportAllToPDF" :disabled="isExporting"
+            class="flex items-center justify-center gap-2 px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed">
             <svg v-if="!isExporting" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
-            <svg v-else class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <svg v-else class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+              viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              <path class="opacity-75" fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+              </path>
             </svg>
             {{ isExporting ? 'Generating PDF...' : 'Export All to PDF' }}
           </button>
@@ -77,11 +63,16 @@
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
               <tr>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Manufacturer</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Model</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">VIN</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prod. Date</th>
-                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Manufacturer</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Model</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  VIN</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Prod. Date</th>
+                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions</th>
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
@@ -102,7 +93,8 @@
         <!-- Empty State -->
         <div v-else class="text-center py-12 border-2 border-dashed border-gray-300 rounded-lg">
           <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
           <h3 class="mt-2 text-sm font-medium text-gray-900">No data imported</h3>
           <p class="mt-1 text-sm text-gray-500">Upload an Excel or CSV file to get started.</p>
@@ -111,15 +103,18 @@
     </main>
 
     <!-- Edit Modal -->
-    <div v-if="isEditModalOpen" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div v-if="isEditModalOpen" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog"
+      aria-modal="true">
       <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <!-- Background overlay -->
-        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" @click="closeEditModal"></div>
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"
+          @click="closeEditModal"></div>
 
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
         <!-- Modal panel -->
-        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-6xl sm:w-full">
+        <div
+          class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-6xl sm:w-full">
           <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
             <div class="flex justify-between items-center mb-6">
               <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Edit Label</h3>
@@ -136,51 +131,65 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label class="block mb-1 text-sm font-semibold text-gray-700">Manufacturer Name (اسم الصانع)</label>
-                    <input v-model="editingItem.manufacturerName" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary" />
+                    <input v-model="editingItem.manufacturerName" type="text"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary" />
                   </div>
                   <div>
                     <label class="block mb-1 text-sm font-semibold text-gray-700">Country (بلد الانتاج)</label>
-                    <input v-model="editingItem.countryOfProduction" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary" />
+                    <input v-model="editingItem.countryOfProduction" type="text"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary" />
                   </div>
                   <div>
-                    <label class="block mb-1 text-sm font-semibold text-gray-700">Production Date (تاريخ الانتاج)</label>
-                    <input v-model="editingItem.productionDate" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary" />
+                    <label class="block mb-1 text-sm font-semibold text-gray-700">Production Date (تاريخ
+                      الانتاج)</label>
+                    <input v-model="editingItem.productionDate" type="text"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary" />
                   </div>
                   <div>
                     <label class="block mb-1 text-sm font-semibold text-gray-700">Model Year (سنة الطراز)</label>
-                    <input v-model="editingItem.modelYear" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary" />
+                    <input v-model="editingItem.modelYear" type="text"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary" />
                   </div>
                   <div>
                     <label class="block mb-1 text-sm font-semibold text-gray-700">Max Weight (الوزن الاقصى)</label>
-                    <input v-model="editingItem.maxWeight" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary" />
+                    <input v-model="editingItem.maxWeight" type="text"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary" />
                   </div>
                   <div>
                     <label class="block mb-1 text-sm font-semibold text-gray-700">Max Weight/Axle (الوزن/محور)</label>
-                    <input v-model="editingItem.maxWeightPerAxle" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary" />
+                    <input v-model="editingItem.maxWeightPerAxle" type="text"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary" />
                   </div>
                   <div class="md:col-span-2">
-                    <label class="block mb-1 text-sm font-semibold text-gray-700">Compliance Note (ملاحظة المطابقة)</label>
-                    <textarea v-model="editingItem.complianceNote" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"></textarea>
+                    <label class="block mb-1 text-sm font-semibold text-gray-700">Compliance Note (ملاحظة
+                      المطابقة)</label>
+                    <textarea v-model="editingItem.complianceNote" rows="2"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"></textarea>
                   </div>
                   <div>
                     <label class="block mb-1 text-sm font-semibold text-gray-700">VIN (الرقم التعريفي)</label>
-                    <input v-model="editingItem.vinNumber" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary" />
+                    <input v-model="editingItem.vinNumber" type="text"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary" />
                   </div>
                   <div>
                     <label class="block mb-1 text-sm font-semibold text-gray-700">Classification (صنف المركبة)</label>
-                    <input v-model="editingItem.vehicleClassification" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary" />
+                    <input v-model="editingItem.vehicleClassification" type="text"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary" />
                   </div>
                   <div>
                     <label class="block mb-1 text-sm font-semibold text-gray-700">Engine (المحرك)</label>
-                    <input v-model="editingItem.engine" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary" />
+                    <input v-model="editingItem.engine" type="text"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary" />
                   </div>
                   <div>
                     <label class="block mb-1 text-sm font-semibold text-gray-700">Model (الطراز)</label>
-                    <input v-model="editingItem.model" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary" />
+                    <input v-model="editingItem.model" type="text"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary" />
                   </div>
                   <div class="md:col-span-2">
                     <label class="block mb-1 text-sm font-semibold text-gray-700">Factory (المصنع)</label>
-                    <input v-model="editingItem.factory" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary" />
+                    <input v-model="editingItem.factory" type="text"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary" />
                   </div>
                 </div>
               </div>
@@ -195,10 +204,12 @@
             </div>
           </div>
           <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-            <button @click="saveEdit" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:bg-primary-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
+            <button @click="saveEdit" type="button"
+              class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:bg-primary-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
               Save Changes
             </button>
-            <button @click="closeEditModal" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+            <button @click="closeEditModal" type="button"
+              class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
               Cancel
             </button>
           </div>
@@ -207,10 +218,11 @@
     </div>
 
     <!-- Hidden Export Container -->
-    <div class="absolute top-0 left-0 -z-50 opacity-0 pointer-events-none" style="width: 400px; height: 200px; overflow: hidden;">
-       <div id="export-container" class="border-4 border-black" style="width: 400px; height: 200px;">
-         <LabelTemplate v-if="exportItem" :data="exportItem" />
-       </div>
+    <div class="absolute top-0 left-0 -z-50 opacity-0 pointer-events-none"
+      style="width: 400px; height: 200px; overflow: hidden;">
+      <div id="export-container" class="border-4 border-black" style="width: 400px; height: 200px;">
+        <LabelTemplate v-if="exportItem" :data="exportItem" />
+      </div>
     </div>
 
   </div>
@@ -241,38 +253,37 @@ const LabelTemplate = defineComponent({
           lineHeight: '1.2'
         }
       }, [
-        h('div', { style: { display: 'flex', flexDirection: 'column', gap: '1px' } }, [
+        h('div', { style: { display: 'flex', flexDirection: 'column', gap: '3px' } }, [
           // Row 1
-          h('div', { style: { display: 'grid', gridTemplateColumns: '0.8fr 1fr', gap: '2px' } }, [
-            h('div', { style: { textAlign: 'right' } }, [
-              h('p', { style: { margin: 0, fontWeight: 'bold' } }, ['بلد الانتاج: ', h('span', d.countryOfProduction || '')])
-            ]),
+          h('div', { style: { display: 'grid', gridTemplateColumns: '1fr 0.8fr', gap: '2px' } }, [
             h('div', { style: { textAlign: 'right' } }, [
               h('p', { style: { margin: 0, fontWeight: 'bold' } }, ['اسم الصانع: ', h('span', d.manufacturerName || '')])
+            ]),
+            h('div', { style: { textAlign: 'right' } }, [
+              h('p', { style: { margin: 0, fontWeight: 'bold' } }, ['بلد الانتاج: ', h('span', d.countryOfProduction || '')])
             ])
           ]),
           // Row 2
-          h('div', { style: { display: 'grid', gridTemplateColumns: '0.8fr 1fr', gap: '2px' } }, [
-            h('div', { style: { textAlign: 'right' } }, [
-              h('p', { style: { margin: 0, fontWeight: 'bold' } }, ['سنة الطراز: ', h('span', d.modelYear || '')])
-            ]),
-            h('div', { style: { textAlign: 'right' } }, [
-              h('p', { style: { margin: 0, fontWeight: 'bold' } }, ['تاريخ الانتاج: ', h('span', d.productionDate || '')])
-            ])
+          h('div', {}, [
+            h('p', { style: { margin: 0, fontWeight: 'bold', textAlign: 'right' } }, ['سنة الطراز: ', h('span', d.modelYear || '')])
           ]),
           // Row 3
           h('div', {}, [
             h('p', { style: { margin: 0, fontWeight: 'bold', textAlign: 'right' } }, ['الوزن الاقصى للمركبة بـ (كغ): ', h('span', d.maxWeight || '')])
           ]),
-          // Row 4
-          h('div', {}, [
-            h('p', { style: { margin: 0, fontWeight: 'bold', textAlign: 'right' } }, ['الوزن الاقصى على كل محور بـ (كغ) (بالنسبة للشاحنات): ', h('span', d.maxWeightPerAxle || '')])
+          // Row 4 - Axle Weight Label with Front/Rear Values on Same Line
+          h('div', { style: { display: 'flex', alignItems: 'center' } }, [
+            h('p', { style: { margin: 0, fontWeight: 'bold' } }, 'الوزن الاقصى على كل محور بـ (كغ):'),
+            h('div', { style: { display: 'flex', gap: '20px', marginRight: '20px' } }, [
+              h('p', { style: { margin: 0, fontWeight: 'bold' } }, ['خلفي: ', h('span', d.maxWeightPerAxle?.split('/')[1]?.trim() || '')]),
+              h('p', { style: { margin: 0, fontWeight: 'bold' } }, ['أمامي: ', h('span', d.maxWeightPerAxle?.split('/')[0]?.trim() || '')])
+            ])
           ]),
-          // Row 5
+          // Row 5 - Compliance Note
           h('div', {}, [
             h('p', { style: { margin: 0, fontWeight: 'bold', textAlign: 'right', lineHeight: '1.3' } }, d.complianceNote || defaultComplianceNote)
           ]),
-          // Row 6
+          // Row 6 - VIN
           h('div', {}, [
             h('p', { style: { margin: 0, fontWeight: 'bold', textAlign: 'right' } }, [
               'الرقم التعريفي للمركبة ',
@@ -281,22 +292,22 @@ const LabelTemplate = defineComponent({
               h('span', { class: 'text-[14.5px] transform -translate-y-[2px]', style: { fontFamily: 'monospace' } }, d.vinNumber || '')
             ])
           ]),
-          // Row 7
+          // Row 7 - Classification
           h('div', {}, [
             h('p', { style: { margin: 0, fontWeight: 'bold', textAlign: 'right' } }, ['صنف المركبة: ', h('span', d.vehicleClassification || '')])
           ]),
-          // Row 8
+          // Row 8 - Engine
           h('div', {}, [
             h('p', { style: { margin: 0, fontWeight: 'bold', textAlign: 'right' } }, ['المحرك: ', h('span', d.engine || '')])
           ]),
-          // Row 9
+          // Row 9 - Model
           h('div', {}, [
             h('p', { style: { margin: 0, fontWeight: 'bold', textAlign: 'right' } }, [
               'الطراز: ',
               h('span', { class: 'text-[12.5px] transform -translate-y-[1px]', style: { direction: 'ltr', display: 'inline-block' } }, d.model || '')
             ])
           ]),
-          // Row 10
+          // Row 10 - Factory
           h('div', {}, [
             h('p', { style: { margin: 0, fontWeight: 'bold', textAlign: 'right' } }, ['المصنع: ', h('span', d.factory || '')])
           ])
@@ -369,7 +380,7 @@ const handleFileUpload = async (event) => {
         model: row['Model'] || row['model'] || '',
         factory: row['Factory'] || row['factory'] || ''
       }))
-      
+
       items.value = [...items.value, ...newItems]
     }
   } catch (error) {
@@ -412,34 +423,34 @@ const saveEdit = () => {
 
 const exportAllToPDF = async () => {
   if (items.value.length === 0) return
-  
+
   isExporting.value = true
   const element = document.getElementById('export-container')
-  
+
   try {
     await document.fonts.ready
-    
+
     // PDF dimensions: 10cm x 5cm
     const pdfWidthMm = 100
     const pdfHeightMm = 50
     const scale = 3
-    
+
     const pdf = new jsPDF({
       orientation: 'landscape',
       unit: 'mm',
       format: [pdfWidthMm, pdfHeightMm],
       compress: true
     })
-    
+
     for (let i = 0; i < items.value.length; i++) {
       // Update the hidden export item
       exportItem.value = items.value[i]
-      
+
       // Wait for DOM update
       await nextTick()
       // Small delay to ensure rendering is complete (sometimes needed for fonts/layout)
       await new Promise(resolve => setTimeout(resolve, 50))
-      
+
       const canvas = await html2canvas(element, {
         scale: scale,
         useCORS: true,
@@ -448,18 +459,18 @@ const exportAllToPDF = async () => {
         letterRendering: true,
         backgroundColor: '#ffffff'
       })
-      
+
       const imgData = canvas.toDataURL('image/png', 1.0)
-      
+
       if (i > 0) {
         pdf.addPage([pdfWidthMm, pdfHeightMm], 'landscape')
       }
-      
+
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidthMm, pdfHeightMm, '', 'FAST')
     }
-    
-    pdf.save(`car-labels-export-${new Date().toISOString().slice(0,10)}.pdf`)
-    
+
+    pdf.save(`car-labels-export-${new Date().toISOString().slice(0, 10)}.pdf`)
+
   } catch (error) {
     console.error('Error exporting PDF:', error)
     alert('Failed to export PDF. Please try again.')
