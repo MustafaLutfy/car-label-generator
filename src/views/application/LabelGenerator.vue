@@ -220,7 +220,7 @@
     <!-- Hidden Export Container -->
     <div class="absolute top-0 left-0 -z-50 opacity-0 pointer-events-none"
       style="width: 400px; height: 200px; overflow: hidden;">
-      <div id="export-container" class="border-4 border-black" style="width: 400px; height: 200px;">
+      <div id="export-container"  style="width: 400px; height: 200px;">
         <LabelTemplate v-if="exportItem" :data="exportItem" />
       </div>
     </div>
@@ -289,7 +289,7 @@ const LabelTemplate = defineComponent({
               'الرقم التعريفي للمركبة ',
               h('span', { style: { direction: 'ltr', display: 'inline-block' } }, 'VIN'),
               ':',
-              h('span', { class: 'text-[14.5px] transform -translate-y-[2px]', style: { fontFamily: 'monospace' } }, d.vinNumber || '')
+              h('span', { style: { fontFamily: 'monospace', fontSize: '12.2px' } }, d.vinNumber || '')
             ])
           ]),
           // Row 7 - Classification
@@ -433,13 +433,13 @@ const exportAllToPDF = async () => {
     // PDF dimensions: 10cm x 5cm
     const pdfWidthMm = 100
     const pdfHeightMm = 50
-    const scale = 3
+    const scale = 5
 
     const pdf = new jsPDF({
       orientation: 'landscape',
       unit: 'mm',
       format: [pdfWidthMm, pdfHeightMm],
-      compress: true
+      compress: false
     })
 
     for (let i = 0; i < items.value.length; i++) {
@@ -482,5 +482,32 @@ const exportAllToPDF = async () => {
 </script>
 
 <style scoped>
+#label-content {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+#label-content * {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ensure consistent rendering for PDF export */
+#label-content p {
+  margin: 0;
+  line-height: 1.4;
+  text-rendering: optimizeLegibility;
+}
+
+/* Better Arabic text rendering */
+#label-content p,
+#label-content span {
+  font-feature-settings: normal;
+  font-variant-ligatures: normal;
+  -webkit-font-feature-settings: normal;
+}
 /* Reuse existing styles if needed */
 </style>
