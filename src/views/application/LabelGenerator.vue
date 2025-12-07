@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="min-h-screen bg-gradient-to-br from-primary-50 via-white to-primary-100">
     <!-- Header -->
     <header class="bg-white shadow-md">
@@ -221,7 +221,7 @@
     <div class="absolute top-0 left-0 -z-50 opacity-0 pointer-events-none"
       style="width: 400px; height: 200px; overflow: hidden;">
       <div id="export-container"  style="width: 400px; height: 200px;">
-        <LabelTemplate v-if="exportItem" :data="exportItem" />
+        <LabelTemplate v-show="exportItem" :data="exportItem || {}" />
       </div>
     </div>
 
@@ -275,8 +275,8 @@ const LabelTemplate = defineComponent({
           h('div', { style: { display: 'flex', alignItems: 'center' } }, [
             h('p', { style: { margin: 0, fontWeight: 'bold' } }, 'الوزن الاقصى على كل محور بـ (كغ):'),
             h('div', { style: { display: 'flex', gap: '20px', marginRight: '20px' } }, [
-              h('p', { style: { margin: 0, fontWeight: 'bold' } }, ['خلفي: ', h('span', d.maxWeightPerAxle?.split('/')[1]?.trim() || '')]),
-              h('p', { style: { margin: 0, fontWeight: 'bold' } }, ['أمامي: ', h('span', d.maxWeightPerAxle?.split('/')[0]?.trim() || '')])
+              h('p', { style: { margin: 0, fontWeight: 'bold' } }, ['خلفي: ', h('span', d.maxWeightPerAxle ? String(d.maxWeightPerAxle).split('/')[1]?.trim() || '' : '')]),
+              h('p', { style: { margin: 0, fontWeight: 'bold' } }, ['أمامي: ', h('span', d.maxWeightPerAxle ? String(d.maxWeightPerAxle).split('/')[0]?.trim() || '' : '')])
             ])
           ]),
           // Row 5 - Compliance Note
@@ -427,6 +427,13 @@ const exportAllToPDF = async () => {
   isExporting.value = true
   const element = document.getElementById('export-container')
 
+  if (!element) {
+    console.error('Export container not found')
+    alert('Export container not found. Please refresh the page and try again.')
+    isExporting.value = false
+    return
+  }
+
   try {
     await document.fonts.ready
 
@@ -443,30 +450,35 @@ const exportAllToPDF = async () => {
     })
 
     for (let i = 0; i < items.value.length; i++) {
-      // Update the hidden export item
-      exportItem.value = items.value[i]
+      try {
+        // Update the hidden export item
+        exportItem.value = items.value[i]
 
-      // Wait for DOM update
-      await nextTick()
-      // Small delay to ensure rendering is complete (sometimes needed for fonts/layout)
-      await new Promise(resolve => setTimeout(resolve, 50))
+        // Wait for DOM update
+        await nextTick()
+        // Small delay to ensure rendering is complete (sometimes needed for fonts/layout)
+        await new Promise(resolve => setTimeout(resolve, 100))
 
-      const canvas = await html2canvas(element, {
-        scale: scale,
-        useCORS: true,
-        allowTaint: true,
-        logging: false,
-        letterRendering: true,
-        backgroundColor: '#ffffff'
-      })
+        const canvas = await html2canvas(element, {
+          scale: scale,
+          useCORS: true,
+          allowTaint: true,
+          logging: false,
+          letterRendering: true,
+          backgroundColor: '#ffffff'
+        })
 
-      const imgData = canvas.toDataURL('image/png', 1.0)
+        const imgData = canvas.toDataURL('image/png', 1.0)
 
-      if (i > 0) {
-        pdf.addPage([pdfWidthMm, pdfHeightMm], 'landscape')
+        if (i > 0) {
+          pdf.addPage([pdfWidthMm, pdfHeightMm], 'landscape')
+        }
+
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidthMm, pdfHeightMm, '', 'FAST')
+      } catch (itemError) {
+        console.error(`Error exporting item ${i + 1}:`, itemError)
+        // Continue with next item instead of stopping
       }
-
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidthMm, pdfHeightMm, '', 'FAST')
     }
 
     pdf.save(`car-labels-export-${new Date().toISOString().slice(0, 10)}.pdf`)
