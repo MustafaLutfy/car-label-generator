@@ -1,0 +1,70 @@
+﻿const exportAllToPDF = async () => {
+  if (items.value.length === 0) return
+
+  isExporting.value = true
+  const element = document.getElementById('export-container')
+
+  if (!element) {
+    console.error('Export container not found')
+    alert('Export container not found. Please refresh the page and try again.')
+    isExporting.value = false
+    return
+  }
+
+  try {
+    await document.fonts.ready
+
+    // PDF dimensions: 10cm x 5cm
+    const pdfWidthMm = 100
+    const pdfHeightMm = 50
+    const scale = 5
+
+    const pdf = new jsPDF({
+      orientation: 'landscape',
+      unit: 'mm',
+      format: [pdfWidthMm, pdfHeightMm],
+      compress: false
+    })
+
+    for (let i = 0; i < items.value.length; i++) {
+      try {
+        // Update the hidden export item
+        exportItem.value = items.value[i]
+
+        // Wait for DOM update
+        await nextTick()
+        // Small delay to ensure rendering is complete (sometimes needed for fonts/layout)
+        await new Promise(resolve => setTimeout(resolve, 100))
+
+        const canvas = await html2canvas(element, {
+          scale: scale,
+          useCORS: true,
+          allowTaint: true,
+          logging: false,
+          letterRendering: true,
+          backgroundColor: '#ffffff'
+        })
+
+        const imgData = canvas.toDataURL('image/png', 1.0)
+
+        if (i > 0) {
+          pdf.addPage([pdfWidthMm, pdfHeightMm], 'landscape')
+        }
+
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidthMm, pdfHeightMm, '', 'FAST')
+      } catch (itemError) {
+        console.error(Error exporting item e:\xampp\htdocs\car-label{i + 1}:, itemError)
+        // Continue with next item instead of stopping
+      }
+    }
+
+    pdf.save(car-labels-export-e:\xampp\htdocs\car-label{new Date().toISOString().slice(0, 10)}.pdf)
+
+  } catch (error) {
+    console.error('Error exporting PDF:', error)
+    alert('Failed to export PDF. Please try again.')
+  } finally {
+    isExporting.value = false
+    exportItem.value = null
+  }
+}
