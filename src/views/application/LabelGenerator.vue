@@ -296,21 +296,7 @@ const LabelTemplate = defineComponent({
           position: 'relative'
         }
       }, [
-        // QR Code in top-left corner
-        qrCodeDataUrl.value ? h('img', {
-          src: qrCodeDataUrl.value,
-          style: {
-            position: 'absolute',
-            top: '5px',
-            left: '5px',
-            width: '70px',
-            height: '70px',
-            zIndex: '10',
-            imageRendering: 'crisp-edges'
-          },
-          alt: 'QR Code'
-        }) : null,
-        h('div', { style: { display: 'flex', flexDirection: 'column', gap: '3px', marginLeft: '80px' } }, [
+        h('div', { style: { display: 'flex', flexDirection: 'column', gap: '3px' } }, [
           // Row 1
           h('div', { style: { display: 'grid', gridTemplateColumns: '1fr 0.8fr', gap: '2px' } }, [
             h('div', { style: { textAlign: 'right' } }, [
@@ -368,7 +354,21 @@ const LabelTemplate = defineComponent({
           h('div', {}, [
             h('p', { style: { margin: 0, fontWeight: 'bold', textAlign: 'right' } }, ['المصنع: ', h('span', d.factory || '')])
           ])
-        ])
+        ]),
+        // QR Code in bottom-left corner
+        qrCodeDataUrl.value ? h('img', {
+          src: qrCodeDataUrl.value,
+          style: {
+            position: 'absolute',
+            bottom: '5px',
+            left: '5px',
+            width: '70px',
+            height: '70px',
+            zIndex: '10',
+            imageRendering: 'crisp-edges'
+          },
+          alt: 'QR Code'
+        }) : null
       ])
     }
   }
