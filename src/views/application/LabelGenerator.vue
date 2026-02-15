@@ -229,18 +229,61 @@
 </template>
 
 <script setup>
-import { ref, nextTick, defineComponent, h } from 'vue'
+import { ref, nextTick, defineComponent, h, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import * as XLSX from 'xlsx'
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
+import QRCode from 'qrcode'
 
 // --- Internal Component for Label Template ---
 // Defining it here to reuse in Preview and Export
 const LabelTemplate = defineComponent({
   props: ['data'],
   setup(props) {
+    const qrCodeDataUrl = ref('')
     const defaultComplianceNote = 'تطابق هذه المركبة المواصفات المعتمدة من الجهاز المركزي للتقييس والسيطرة النوعية /العراق'
+
+    const generateQRCode = async () => {
+      const d = props.data || {}
+      // Create readable text-based format for QR code with line breaks - includes ALL data
+      const lines = []
+
+      if (d.manufacturerName) lines.push(`Manufacturer: ${d.manufacturerName}`)
+      if (d.countryOfProduction) lines.push(`Country: ${d.countryOfProduction}`)
+      if (d.productionDate) lines.push(`Prod Date: ${d.productionDate}`)
+      if (d.modelYear) lines.push(`Year: ${d.modelYear}`)
+      if (d.maxWeight) lines.push(`Max Weight: ${d.maxWeight}`)
+      if (d.maxWeightPerAxle) lines.push(`Axle Weight: ${d.maxWeightPerAxle}`)
+      if (d.complianceNote) lines.push(`Compliance: ${d.complianceNote}`)
+      if (d.vinNumber) lines.push(`VIN: ${d.vinNumber}`)
+      if (d.vehicleClassification) lines.push(`Class: ${d.vehicleClassification}`)
+      if (d.engine) lines.push(`Engine: ${d.engine}`)
+      if (d.model) lines.push(`Model: ${d.model}`)
+      if (d.factory) lines.push(`Factory: ${d.factory}`)
+
+      const qrText = lines.join('\n')
+
+      try {
+        qrCodeDataUrl.value = await QRCode.toDataURL(qrText, {
+          width: 120,
+          margin: 0,
+          errorCorrectionLevel: 'L'
+        })
+      } catch (error) {
+        console.error('Error generating QR code:', error)
+      }
+    }
+
+    onMounted(() => {
+      generateQRCode()
+    })
+
+    // Watch for data changes to regenerate QR code
+    watch(() => props.data, () => {
+      generateQRCode()
+    }, { deep: true })
+
     return () => {
       const d = props.data || {}
       return h('div', {
@@ -250,7 +293,8 @@ const LabelTemplate = defineComponent({
           fontFamily: "'Arial', sans-serif",
           padding: '0px 8px 10px 8px',
           fontSize: '12.2px',
-          lineHeight: '1.2'
+          lineHeight: '1.2',
+          position: 'relative'
         }
       }, [
         h('div', { style: { display: 'flex', flexDirection: 'column', gap: '3px' } }, [
@@ -311,7 +355,21 @@ const LabelTemplate = defineComponent({
           h('div', {}, [
             h('p', { style: { margin: 0, fontWeight: 'bold', textAlign: 'right' } }, ['المصنع: ', h('span', d.factory || '')])
           ])
-        ])
+        ]),
+        // QR Code in bottom-left corner
+        qrCodeDataUrl.value ? h('img', {
+          src: qrCodeDataUrl.value,
+          style: {
+            position: 'absolute',
+            bottom: '5px',
+            left: '5px',
+            width: '70px',
+            height: '70px',
+            zIndex: '10',
+            imageRendering: 'crisp-edges'
+          },
+          alt: 'QR Code'
+        }) : null
       ])
     }
   }
