@@ -246,15 +246,16 @@ const LabelTemplate = defineComponent({
 
     const generateQRCode = async () => {
       const d = props.data || {}
-      // Create readable text-based format for QR code with line breaks
+      // Create readable text-based format for QR code with line breaks - includes ALL data
       const lines = []
 
       if (d.manufacturerName) lines.push(`Manufacturer: ${d.manufacturerName}`)
       if (d.countryOfProduction) lines.push(`Country: ${d.countryOfProduction}`)
-      if (d.modelYear) lines.push(`Year: ${d.modelYear}`)
       if (d.productionDate) lines.push(`Prod Date: ${d.productionDate}`)
+      if (d.modelYear) lines.push(`Year: ${d.modelYear}`)
       if (d.maxWeight) lines.push(`Max Weight: ${d.maxWeight}`)
       if (d.maxWeightPerAxle) lines.push(`Axle Weight: ${d.maxWeightPerAxle}`)
+      if (d.complianceNote) lines.push(`Compliance: ${d.complianceNote}`)
       if (d.vinNumber) lines.push(`VIN: ${d.vinNumber}`)
       if (d.vehicleClassification) lines.push(`Class: ${d.vehicleClassification}`)
       if (d.engine) lines.push(`Engine: ${d.engine}`)
@@ -267,7 +268,7 @@ const LabelTemplate = defineComponent({
         qrCodeDataUrl.value = await QRCode.toDataURL(qrText, {
           width: 120,
           margin: 0,
-          errorCorrectionLevel: 'M'
+          errorCorrectionLevel: 'L'
         })
       } catch (error) {
         console.error('Error generating QR code:', error)
